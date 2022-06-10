@@ -6,10 +6,13 @@ async function refresh(payload){
     const username = payload.username
     const RT = payload.refreshToken
 
-    const tokens = await getTokens(username)
+    const tokens = await getTokens(username, RT)
 
-    if(!tokens || tokens.refreshToken != RT)
+    if(!tokens)
         throw Error('Invalid refresh token!')
+
+    if(tokens.RTValidUntil < new Date(Date.now()))
+        throw Error('Refresh token is expired!')
 
     try{
         await revoke({jwt:tokens.jwt})

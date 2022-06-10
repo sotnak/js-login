@@ -61,7 +61,7 @@ async function getUser(username){
 async function setTokens(username, jwt, refreshToken, RTValidUntil){
     const {db, client} = openConnection()
 
-    await db.collection('tokens').deleteMany({username})
+    await db.collection('tokens').deleteMany({username, RTValidUntil: {$ls: new Date(Date.now())}})
     await db.collection('tokens').insertOne({username, jwt, refreshToken, RTValidUntil})
 
     client.close()
@@ -69,10 +69,10 @@ async function setTokens(username, jwt, refreshToken, RTValidUntil){
     return true;
 }
 
-async function getTokens(username){
+async function getTokens(username, refreshToken){
     const {db, client} = openConnection()
 
-    const tokens = await db.collection('tokens').findOne({username})
+    const tokens = await db.collection('tokens').findOne({username, refreshToken})
 
     client.close()
 
