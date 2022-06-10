@@ -1,41 +1,41 @@
-const crypto = require('crypto');
+const {setNonce, findAndDeleteNonce, getUser, setTokens} = require('./mongo')
+const {genNonce, getJWT, getRefreshToken, hashWithNonce} = require('./secutiry')
 
-function gethash(str, nonce=''){
-    const hash1 = crypto.createHash('sha256').update(str).digest('hex')
-    if(nonce.length > 1)
-        return crypto.createHash('sha256').update(hash1 + '.' + nonce).digest('hex');
-    else
-        return hash1;
+async function getNonce(){
+    const nonce = genNonce()
+    console.log(hashWithNonce('password', nonce));
+    await setNonce(nonce)
+    return nonce;
 }
 
-function getJWT(payload, secret){
-    const header = {
-      typ: 'JWT',
-      alg: 'HS256'
+async function login(payload){
+    const username = payload.username
+    const password = payload.password
+    const nonce = payload.nonce
+
+    if(!nonce || !username || !password)
+        throw Error('Invalid credentials!');
+
+    await findAndDeleteNonce(nonce)
+
+    const actualUser = await getUser(username)
+    const actualPassword = actualUser.password;
+
+    if(password != hashWithNonce(actualPassword, nonce))
+        throw Error('Wrong password!')
+    
+    const jwt = getJWT({username})
+    const refreshToken = getRefreshToken()
+
+    await setTokens(username, jwt.token, refreshToken.token, refreshToken.validUntil)
+
+    return {
+        jwt: jwt.token,
+        JWTValidUntil: jwt.validUntil.toISOString(),
+        refreshToken: refreshToken.token,
+        RTValidUntil: refreshToken.validUntil.toISOString()
     };
-
-    const header64 = Buffer.from(JSON.stringify(header)).toString('base64');
-
-    const payload64 = Buffer.from(JSON.stringify(payload)).toString('base64');
-
-    let key = header64 + '.' + payload64;
-    const signature = crypto.createHmac('sha256', secret).update(key);
-    const key64 = signature.digest('base64');
-
-    const token = header64 + '.' +payload64 + '.' + key64
-    const refreshtoken = crypto.randomBytes(32).toString('hex');
-    return {token, refreshtoken};
 }
 
-const nonce = crypto.randomBytes(16).toString('hex');
-console.log(gethash('hello world', nonce))
-
-const secret = crypto.randomBytes(16).toString('hex');
-
-const payload = {
-  autDate: Date.now(),
-  validUntil: Date.now()+2000,
-  username: gethash('hello world')
-};
-
-console.log(getJWT(payload, secret))
+module.exports.getNonce = getNonce;
+module.exports.login = login;
