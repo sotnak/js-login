@@ -1,16 +1,15 @@
-const { addRevokedToken } = require("./mongo")
+const { addRevokedToken, findAndDeleteAllTokens, addRevokedTokens } = require("./mongo")
 const {access} = require('./access')
 
-function getValidUntil(jwt){
+function getPayload(jwt){
     const str = Buffer.from(jwt.split('.')[1],'base64').toString('ascii')
 
-    return JSON.parse(str).validUntil;
+    return JSON.parse(str);
 }
 
-async function revoke(payload){
-    const jwt = payload.jwt
+async function revoke(jwt){
 
-    const validUntil = getValidUntil(jwt)
+    const {validUntil} = getPayload(jwt)
 
     await access(jwt)
 
@@ -19,4 +18,20 @@ async function revoke(payload){
     return true;
 }
 
+async function revokeAll(jwt){
+
+    const {validUntil, username} = getPayload(jwt)
+
+    await access(jwt)
+    
+    const tokens = await findAndDeleteAllTokens(username)
+
+    const toRevoke = tokens.map(elem => ({token: elem.jwt, validUntil: getPayload(elem.jwt).validUntil}))
+
+    await addRevokedTokens(toRevoke)
+
+    return true;
+}
+
 module.exports.revoke = revoke;
+module.exports.revokeAll = revokeAll;

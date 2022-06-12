@@ -42,7 +42,7 @@ async function findAndDeleteNonce(nonce){
 
     client.close()
 
-    return true;
+    return found;
 }
 
 async function getUser(username){
@@ -58,10 +58,10 @@ async function getUser(username){
     return user;
 }
 
-async function setTokens(username, jwt, refreshToken, RTValidUntil){
+async function setAndClearTokens(username, jwt, refreshToken, RTValidUntil){
     const {db, client} = openConnection()
 
-    await db.collection('tokens').deleteMany({username, RTValidUntil: {$ls: new Date(Date.now())}})
+    await db.collection('tokens').deleteMany({username, RTValidUntil: {$lt: new Date(Date.now())}})
     await db.collection('tokens').insertOne({username, jwt, refreshToken, RTValidUntil})
 
     client.close()
@@ -89,10 +89,33 @@ async function modifyTokens(username, jwt, refreshToken, RTValidUntil){
     return true;
 }
 
+async function findAndDeleteAllTokens(username){
+    const {db, client} = openConnection()
+
+    const res = await db.collection('tokens').find({username}).toArray()
+    await db.collection('tokens').deleteMany({username})
+
+    client.close()
+
+    return res;
+}
+
 async function addRevokedToken(token, validUntil){
     const {db, client} = openConnection()
 
     await db.collection('revokedTokens').insertOne({token, validUntil})
+
+    client.close()
+
+    return true;
+}
+
+async function addRevokedTokens(tokens){
+    const {db, client} = openConnection()
+
+    const toInsert = tokens.map(elem=>({token: elem.token, validUntil: elem.validUntil}))
+
+    await db.collection('revokedTokens').insertMany(toInsert);
 
     client.close()
 
@@ -116,8 +139,10 @@ module.exports.register = register;
 module.exports.findAndDeleteNonce = findAndDeleteNonce;
 module.exports.setNonce = setNonce;
 module.exports.getUser = getUser;
-module.exports.setTokens =  setTokens;
+module.exports.setAndClearTokens =  setAndClearTokens;
 module.exports.getTokens = getTokens;
 module.exports.modifyTokens = modifyTokens;
 module.exports.addRevokedToken = addRevokedToken;
 module.exports.findRevoked = findRevoked;
+module.exports.findAndDeleteAllTokens = findAndDeleteAllTokens;
+module.exports.addRevokedTokens = addRevokedTokens;

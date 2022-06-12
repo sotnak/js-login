@@ -18,13 +18,13 @@ content-type: application/json
 
 {
     "username":"username",
-    "password":"792c892602970defcd9687ccfdd4c9a11bb842e74f521462570c40e03d9415a4",
-    "nonce":"e2697d9019ca57ba441dd1d2a8259d8b"
+    "password":"76cfb1d307122129d5207a99ea4cd7311d2e3644f5da015c81d5038765285b2c",
+    "nonce":"6f77a81dc6902558ffcb93677094a7ee"
 }
 ###
 
 GET http://localhost:8080/access HTTP/1.1
-Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwidmFsaWRVbnRpbCI6IjIwMjItMDYtMTBUMTc6MDQ6NDUuMjkwWiJ9.MzP9XRUrrcRK/EPVk3FTaBBmXFwyzKAR/3w9lXkiing=
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwidmFsaWRVbnRpbCI6IjIwMjItMDYtMTJUMTY6MTU6MDAuNTUzWiJ9.LlslUeM9A5gjWl2F4im1hJ5zOCst8eBhMpkFEsgSBKY=
 
 ###
 
@@ -33,7 +33,7 @@ content-type: application/json
 
 {
     "username":"username",
-    "refreshToken":"83d8796ac379d794b6160a0814e983488929023f02d3f2bef4288b4705950c8b"
+    "refreshToken":"4f9ca24c605dc5397f7d3e10665cc05b52439538b6af8913c2dcca64e85ca5d4"
 }
 ###
 
@@ -41,5 +41,5 @@ POST http://localhost:8080/revoke HTTP/1.1
 content-type: application/json
 
 {
-    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwidmFsaWRVbnRpbCI6IjIwMjItMDYtMTBUMTc6MDQ6NDUuMjkwWiJ9.MzP9XRUrrcRK/EPVk3FTaBBmXFwyzKAR/3w9lXkiing="
+    "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwidmFsaWRVbnRpbCI6IjIwMjItMDYtMTJUMTY6MTQ6MDAuODU4WiJ9.Ze5mKbAIVl3HJeuNI1NfEmnmeYYXDE4gKvau1U8V5F0="
 }

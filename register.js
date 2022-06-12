@@ -1,8 +1,8 @@
 const dbRegister = require('./mongo').register
 
-async function register(payload){
+async function register(username, password){
 
-    await dbRegister(payload.username, payload.password)
+    await dbRegister(username, password)
     
     return true
 }

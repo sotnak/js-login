@@ -1,7 +1,7 @@
 const {register} = require('./register')
 const {access} = require('./access')
 const {refresh} = require('./refresh')
-const {revoke} = require('./revoke')
+const {revokeAll} = require('./revoke')
 const { getNonce, login } = require('./login')
 
 const express = require('express')
@@ -32,7 +32,10 @@ app.get('/nonce', async (req, res) => {
 })
 
 app.post('/register', async (req, res) => {
-    register(req.body).then(()=>{
+    const username = req.body.username
+    const password = req.body.password
+
+    register(username, password).then(()=>{
         res.sendStatus(200)
     }).catch((e)=>{
         res.status(400).send(e.message);
@@ -40,7 +43,11 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    login(req.body).then((tokens)=>{
+    const username = req.body.username
+    const password = req.body.password
+    const nonce = req.body.nonce
+
+    login(username, password, nonce).then((tokens)=>{
         res.send(tokens)
     }).catch((e)=>{
         res.status(400).send(e.message);
@@ -48,7 +55,10 @@ app.post('/login', async (req, res) => {
 })
 
 app.post('/refresh', async (req, res) => {
-    refresh(req.body).then((tokens)=>{
+    const username = req.body.username
+    const refreshToken = req.body.refreshToken
+
+    refresh(username, refreshToken).then((tokens)=>{
         res.send(tokens)
     }).catch((e)=>{
         res.status(400).send(e.message);
@@ -56,7 +66,9 @@ app.post('/refresh', async (req, res) => {
 })
 
 app.post('/revoke', async (req, res) => {
-    revoke(req.body).then(()=>{
+    const jwt = req.body.jwt
+
+    revokeAll(jwt).then(()=>{
         res.sendStatus(200)
     }).catch((e)=>{
         res.status(400).send(e.message);
