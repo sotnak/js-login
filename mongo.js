@@ -12,8 +12,10 @@ async function register(username, password){
     const {db, client} = openConnection()
 
     const found = await db.collection('users').findOne({username})
-    if(found)
+    if(found){
+        client.close()
         throw Error('User already exists!')
+    }
 
     await db.collection('users').insertOne({username, password})
 
@@ -37,10 +39,10 @@ async function findAndDeleteNonce(nonce){
 
     const found = await db.collection('nonces').findOneAndDelete({nonce})
 
+    client.close()
+
     if(!found.value)
         throw Error('Invalid nonce!')
-
-    client.close()
 
     return found;
 }
@@ -50,10 +52,10 @@ async function getUser(username){
 
     const user = await db.collection('users').findOne({username})
 
+    client.close()
+
     if(!user)
         throw Error('User not found!')
-
-    client.close()
 
     return user;
 }
@@ -127,10 +129,10 @@ async function findRevoked(token){
 
     const found = await db.collection('revokedTokens').findOne({token})
 
+    client.close()
+
     if(!found)
         return false;
-
-    client.close()
 
     return true;
 }
