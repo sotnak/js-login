@@ -1,6 +1,6 @@
-const { getTokens, modifyTokens } = require("./mongo")
+const { getTokens, modifyTokens } = require("../mongo")
 const { revoke } = require("./revoke")
-const {getJWT, getRefreshToken} = require('./secutiry')
+const {getJWT, getRefreshToken} = require('../secutiry')
 
 async function refresh(username, refreshToken){
 

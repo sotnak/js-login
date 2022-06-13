@@ -1,5 +1,5 @@
-const {setNonce, findAndDeleteNonce, getUser, setAndClearTokens} = require('./mongo')
-const {genNonce, getJWT, getRefreshToken, hashWithNonce} = require('./secutiry')
+const {setNonce, findAndDeleteNonce, getUser, setAndClearTokens} = require('../mongo')
+const {genNonce, getJWT, getRefreshToken, hashWithNonce} = require('../secutiry')
 
 async function getNonce(){
     const nonce = genNonce()

@@ -1,5 +1,5 @@
-const { findRevoked } = require("./mongo")
-const { getSignature } = require("./secutiry")
+const { findRevoked } = require("../mongo")
+const { getSignature } = require("../secutiry")
 
 function checkSignature(authHeader){
 

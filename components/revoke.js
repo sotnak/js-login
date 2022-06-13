@@ -1,4 +1,4 @@
-const { addRevokedToken, findAndDeleteAllTokens, addRevokedTokens } = require("./mongo")
+const { addRevokedToken, findAndDeleteAllTokens, addRevokedTokens } = require("../mongo")
 const {access} = require('./access')
 
 function getPayload(jwt){

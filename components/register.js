@@ -1,4 +1,4 @@
-const dbRegister = require('./mongo').register
+const dbRegister = require('../mongo').register
 
 async function register(username, password){
 

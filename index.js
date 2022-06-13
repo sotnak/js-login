@@ -1,8 +1,8 @@
-const {register} = require('./register')
-const {access} = require('./access')
-const {refresh} = require('./refresh')
-const {revokeAll} = require('./revoke')
-const { getNonce, login } = require('./login')
+const {register} = require('./components/register')
+const {access} = require('./components/access')
+const {refresh} = require('./components/refresh')
+const {revokeAll} = require('./components/revoke')
+const { getNonce, login } = require('./components/login')
 
 'use strict';
 

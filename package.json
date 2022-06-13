@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "dbsetup": "node dbsetup.js",
-    "clearrevoked": "node clearrevoked.js"
+    "dbsetup": "node scripts/dbsetup.js",
+    "clearrevoked": "node scripts/clearrevoked.js"
   },
   "author": "",
   "license": "ISC",
