@@ -4,9 +4,12 @@ const {refresh} = require('./refresh')
 const {revokeAll} = require('./revoke')
 const { getNonce, login } = require('./login')
 
+'use strict';
+
 const express = require('express')
 const bp = require('body-parser')
 const { application } = require('express')
+const { environment } = require('./environment')
 const app = express()
 const port = 8080
 
@@ -76,5 +79,6 @@ app.post('/revoke', async (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Login app listening on port ${port}`)
+  console.log(`Using mongo on ${environment.mongo_addr}`)
 })
