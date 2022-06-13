@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-const secret = 'secret'
+const secret = crypto.randomBytes(16).toString('hex');
 
 const jwtLifeSpan = 600000 // 10 min
 const refreshTokenLifeSpan = 3600000 // 1 h
