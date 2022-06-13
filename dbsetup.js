@@ -1,6 +1,7 @@
 const { MongoClient } = require("mongodb");
+const {environment} = require("./environment")
 
-const url = "mongodb://localhost:27017"
+const url = "mongodb://"+environment.mongo_addr
 const client = new MongoClient(url);
 
 async function run() {
