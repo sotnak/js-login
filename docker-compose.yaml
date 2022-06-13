@@ -1,15 +1,37 @@
 version: "2.4"
 services:
+  
   mongo:
     image: mongo
     container_name: mongo
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
       
   login-app:
     links:
       - mongo
     image: loginapp
     container_name: login-app
-    ports:
-      - "8080:8080"
     environment:
       -  mongo_addr=mongo
+
+  caddy:
+    links:
+      - login-app
+    image: caddy
+    container_name: caddy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  mongo_data:
+  mongo_config:
+  caddy_data:
+  caddy_config:
