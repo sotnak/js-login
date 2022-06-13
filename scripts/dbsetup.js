@@ -33,13 +33,14 @@ async function run() {
             await db.dropCollection(coll)
         }
 
-        console.log(await db.createCollection(coll))
+        await db.createCollection(coll)
+        console.log(`${coll} created`)
     }
 
-    console.log(await db.collection('users').createIndex({username:1}))
-    console.log(await db.collection('tokens').createIndex({username:1}))
-    console.log(await db.collection('revokedTokens').createIndex({token:1}))
-    console.log(await db.collection('nonce').createIndex({nonce:1}))
+    console.log('index on users',await db.collection('users').createIndex({username:1}))
+    console.log('index on tokens',await db.collection('tokens').createIndex({username:1}))
+    console.log('index on revokedTokens',await db.collection('revokedTokens').createIndex({token:1}))
+    console.log('index on nonce',await db.collection('nonces').createIndex({nonce:1}))
 
     client.close()
 }
