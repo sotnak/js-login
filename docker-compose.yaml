@@ -7,16 +7,16 @@ services:
     volumes:
       - mongo_data:/data/db
       - mongo_config:/data/configdb
-    ports:
-      - "27017:27017"
+    #ports:
+    #  - "27017:27017"
 
   redis:
     image: redis
     container_name: redis
     volumes:
       - redis_data:/data
-    ports:
-      - "6379:6379"
+    #ports:
+    #  - "6379:6379"
 
   login-app:
     links:
