@@ -18,7 +18,7 @@ async function refresh(username, refreshToken){
         //token is already invalid
     }
 
-    const jwt = getJWT({username})
+    const jwt = await getJWT({username})
     const RT = getRefreshToken()
 
     await modifyTokens(username, jwt.token, RT.token, RT.validUntil)

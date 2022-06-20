@@ -7,14 +7,26 @@ services:
     volumes:
       - mongo_data:/data/db
       - mongo_config:/data/configdb
-      
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
   login-app:
     links:
       - mongo
+      - redis
     image: loginapp
     container_name: login-app
     environment:
       -  mongo_addr=mongo
+      - redis_addr=redis
 
   caddy:
     links:
@@ -33,5 +45,6 @@ services:
 volumes:
   mongo_data:
   mongo_config:
+  redis_data:
   caddy_data:
   caddy_config:

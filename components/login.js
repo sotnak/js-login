@@ -1,4 +1,5 @@
-const {setNonce, findAndDeleteNonce, getUser, setAndClearTokens} = require('../mongo')
+const {getUser, setAndClearTokens} = require('../mongo')
+const {setNonce, deleteNonce} = require('../redis')
 const {genNonce, getJWT, getRefreshToken, hashWithNonce} = require('../secutiry')
 
 async function getNonce(){
@@ -13,7 +14,7 @@ async function login(username, password, nonce){
     if(!nonce || !username || !password)
         throw Error('Invalid credentials!');
 
-    await findAndDeleteNonce(nonce)
+    await deleteNonce(nonce)
 
     const actualUser = await getUser(username)
     const actualPassword = actualUser.password;
@@ -21,7 +22,7 @@ async function login(username, password, nonce){
     if(password != hashWithNonce(actualPassword, nonce))
         throw Error('Wrong password!')
     
-    const jwt = getJWT({username})
+    const jwt = await getJWT({username})
     const refreshToken = getRefreshToken()
 
     await setAndClearTokens(username, jwt.token, refreshToken.token, refreshToken.validUntil)

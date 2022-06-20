@@ -8,7 +8,7 @@ const { getNonce, login } = require('./components/login')
 
 const express = require('express')
 const bp = require('body-parser')
-const { application } = require('express')
+//const { application } = require('express')
 const { environment } = require('./environment')
 const app = express()
 const port = 8080
@@ -17,7 +17,7 @@ app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
 app.get('/', (req, res) => {
-  res.send('Hello, this is login app!')
+    res.send('Hello, this is login app!')
 })
 
 app.get('/access', async (req, res) => {
@@ -29,7 +29,9 @@ app.get('/access', async (req, res) => {
 })
 
 app.get('/nonce', async (req, res) => {
-    const nonce = await getNonce().catch(()=>{res.sendStatus(500)})
+    const nonce = await getNonce().catch((e)=>{
+        console.log(e)
+        res.sendStatus(500)})
 
     res.send(nonce)
 })
@@ -81,4 +83,5 @@ app.post('/revoke', async (req, res) => {
 app.listen(port, () => {
   console.log(`Login app listening on port ${port}`)
   console.log(`Using mongo on ${environment.mongo_addr}`)
+  console.log(`Using redis on ${environment.redis_addr}`)
 })
